@@ -43,7 +43,7 @@ public class Node<K, T> {
         this.rightChild = rightChild;
     }
 
-    public Node<K, T> findNode(K key) {
+   /* public Node<K, T> findNode(K key) {
         if (key == this.key) {
             return this;
         } else {
@@ -61,5 +61,5 @@ public class Node<K, T> {
             }
             return null;
         }
-    }
+    }*/
 }

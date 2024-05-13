@@ -1,35 +1,101 @@
 public class Tree<K, T> implements MyTree<K, T> {
-    private Node<K,T> root;
+    private Node<K, T> root;
 
     public Tree() {
         this.root = root;
     }
 
+
     @Override
-    public T find(K key){
-        return findRecursive(root,key);
+    public T find(K key) {
+        return findRecursive(root, key);
     }
-    @Override
-    public void insert(K key, T data, K parentKey){
-        if (root == null) {
-            root = new Node<>(key, data);
-        } else {
-            insertRecursive(root, key, data, parentKey);
+
+    private T findRecursive(Node<K, T> currentNode, K key) {
+        if (currentNode == null) {
+            return null; // Si llegamos a una hoja vacía, retornamos null (clave no encontrada)
         }
+        if (currentNode.getKey().equals(key)) {
+            return currentNode.getData(); // Si la clave del nodo actual coincide con la clave buscada, retornamos su valor
+        }
+        // Realizamos la búsqueda en los hijos del nodo actual
+        T leftResult = findRecursive(currentNode.getLeftChild(), key);
+        if (leftResult != null) {
+            return leftResult; // Si se encontró en el subárbol izquierdo, retornamos el resultado
+        }
+        return findRecursive(currentNode.getRightChild(), key); // Si no, continuamos la búsqueda en el subárbol derecho
     }
+
+    @Override
+    public void insert(K key, T data, K parentKey) {
+        Node<K, T> newNode = new Node<>(key, data);
+
+        if (parentKey == null) {
+            // Si parentKey es null, el nuevo nodo será la raíz del árbol
+            root = newNode;
+            return;
+        }
+
+        // Buscamos el nodo padre en el árbol
+        Node<K, T> parentNode = findNode(root, parentKey);
+        if (parentNode == null) {
+            // Si no se encuentra el nodo padre, no se puede insertar
+            System.out.println("No se encontró el nodo padre");
+            return;
+        }
+
+        // Insertamos el nuevo nodo como hijo de parentNode
+        if (parentNode.getLeftChild() == null) {
+            parentNode.setLeftChild(newNode);
+        } else if (parentNode.getRightChild() == null) {
+            parentNode.setRightChild(newNode);
+        } else {
+            // Si ambos hijos del nodo padre están ocupados, no se puede insertar
+            System.out.println("No se pueden insertar más hijos en este nodo padre");
+        }
+
+    }
+
+    // Función auxiliar para encontrar un nodo dado su clave
+    private Node<K, T> findNode(Node<K, T> currentNode, K key) {
+        if (currentNode == null) {
+            return null; // Si llegamos a una hoja vacía, retornamos null (nodo no encontrado)
+        }
+        if (currentNode.getKey().equals(key)) {
+            return currentNode; // Si la clave del nodo actual coincide con la clave buscada, retornamos el nodo actual
+        }
+        // Realizamos la búsqueda en los hijos del nodo actual
+        Node<K, T> leftResult = findNode(currentNode.getLeftChild(), key);
+        if (leftResult != null) {
+            return leftResult; // Si se encontró en el subárbol izquierdo, retornamos el nodo encontrado
+        }
+        return findNode(currentNode.getRightChild(), key); // Si no, continuamos la búsqueda en el subárbol derecho
+    }
+
     @Override
     public void delete(K key) {
         root = deleteRecursive(root, key);
     }
 
-    // Métodos auxiliares recursivos
-
-    private T findRecursive(Node<K, T> node, K key) {
-        return node.findNode(key).getData();
+    // Función auxiliar recursiva para eliminar un nodo dado su clave
+    private Node<K, T> deleteRecursive(Node<K, T> currentNode, K key) {
+        if (currentNode == null) {
+            return null; // Si llegamos a una hoja vacía, retornamos null
+        }
+        if (currentNode.getKey().equals(key)) {
+            return null; // Si encontramos el nodo con la clave deseada, lo marcamos como nulo
+        }
+        // Eliminamos el nodo de los subárboles izquierdo y derecho
+        currentNode.setLeftChild(deleteRecursive(currentNode.getLeftChild(), key));
+        currentNode.setRightChild(deleteRecursive(currentNode.getRightChild(), key));
+        return currentNode;
     }
 
-    private void insertRecursive(Node<K, T> node, K key, T data, K parentKey) {
-        if (node == null){
+
+}
+
+    // private void insertRecursive(Node<K, T> node, K key, T data, K parentKey) {
+        /*if (node == null){
             return;
         }
         if (parentKey.equals(node.getKey())){
@@ -57,11 +123,11 @@ public class Tree<K, T> implements MyTree<K, T> {
             } else {
                 insertRecursive(node.rightChild, key, data, parentKey);
             }
-        }
-    }
+        }*/
+   // }
 
-    private Node<K, T> deleteRecursive(Node<K, T> node, K key) {
-        if (node == null) {
+    //private Node<K, T> deleteRecursive(Node<K, T> node, K key) {return node;}
+/*        if (node == null) {
             return null;
         }
 
@@ -88,15 +154,15 @@ public class Tree<K, T> implements MyTree<K, T> {
             node.data = successor.data;
             node.rightChild = deleteRecursive(node.rightChild, successor.key);
         }
-        return node;
-    }
+        return node;*/
 
-    private Node<K, T> findMin(Node<K, T> node) {
-        while (node.leftChild != null) {
+
+   /* private Node<K, T> findMin(Node<K, T> node) {
+        *//*while (node.leftChild != null) {
             node = node.leftChild;
-        }
+        }*//*
         return node;
-    }
+    }*/
 
 
-}
+
