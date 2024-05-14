@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 public class Tree<K, T> implements MyTree<K, T> {
     private Node<K, T> root;
 
@@ -118,7 +120,70 @@ public class Tree<K, T> implements MyTree<K, T> {
             return countLeaf(node.getLeftChild()) + countLeaf(node.getRightChild());
         }
     }
+    @Override
+    public int countCompleteElements(Node<K,T> node) {
+        return countCompleteElementsRecursive(root);
+    }
+    private int countCompleteElementsRecursive(Node<K, T> currentNode) {
+        if (currentNode == null) {
+            return 0;
+        }
+        if (currentNode.getLeftChild() != null && currentNode.getRightChild() != null) {
+            return 1 + countCompleteElementsRecursive(currentNode.getLeftChild()) + countCompleteElementsRecursive(currentNode.getRightChild());
+        }
+        return countCompleteElementsRecursive(currentNode.getLeftChild()) + countCompleteElementsRecursive(currentNode.getRightChild());
+    }
+    @Override
+    public List<K> inOrder() {
+        Node<K,T> currentNode = root;
+        List<K> list = new ArrayList<>();
+        return inOrderRecursive(currentNode,list);
+    }
+
+    private List<K> inOrderRecursive(Node<K,T> currentNode, List<K> list){
+        if (currentNode == null) {
+            return list;
+        }
+        inOrderRecursive(currentNode.getLeftChild(),list);
+        list.add(currentNode.getKey());
+        inOrderRecursive(currentNode.getRightChild(),list);
+        return list;
+    }
+    @Override
+    public List<K> preOrder(){
+        Node<K,T> currentNode = root;
+        List<K> list = new ArrayList<>();
+        return preOrderRecursive(currentNode,list);
+    }
+    private List<K> preOrderRecursive(Node<K,T> currentNode, List<K> list){
+        if (currentNode == null) {
+            return list;
+        }
+        list.add(currentNode.getKey());
+        inOrderRecursive(currentNode.getLeftChild(),list);
+        inOrderRecursive(currentNode.getRightChild(),list);
+        return list;
+    }
+
+    @Override
+    public List<K> postOrder(){
+        Node<K,T> currentNode = root;
+        List<K> list = new ArrayList<>();
+        return postOrderRecursive(currentNode,list);
+    }
+    private List<K> postOrderRecursive(Node<K,T> currentNode, List<K> list){
+        if (currentNode == null) {
+            return list;
+        }
+        inOrderRecursive(currentNode.getLeftChild(),list);
+        inOrderRecursive(currentNode.getRightChild(),list);
+        list.add(currentNode.getKey());
+        return list;
+    }
+
+
 }
+
 
 
     // private void insertRecursive(Node<K, T> node, K key, T data, K parentKey) {
