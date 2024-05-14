@@ -91,8 +91,35 @@ public class Tree<K, T> implements MyTree<K, T> {
         return currentNode;
     }
 
-
+    @Override
+    public int size(Node<K,T> node) {
+        node = root;
+        int contador = 1;
+        if (root == null) {
+            return 0;
+        }
+        if (node.getLeftChild() != null) {
+            return contador += size(node.getLeftChild());
+        }
+        if (node.getRightChild() != null) {
+             return contador += size(node.getRightChild());
+        }
+        return contador;
+    }
+    @Override
+    public int countLeaf(Node<K,T> node) {
+        node = root;
+        if (node == null) {
+            return 0;
+        }
+        if (node.getLeftChild() == null && node.getRightChild() == null) {
+            return 1;
+        } else {
+            return countLeaf(node.getLeftChild()) + countLeaf(node.getRightChild());
+        }
+    }
 }
+
 
     // private void insertRecursive(Node<K, T> node, K key, T data, K parentKey) {
         /*if (node == null){
