@@ -181,6 +181,21 @@ public class Tree<K, T> implements MyTree<K, T> {
         return list;
     }
 
+    @Override
+    public List<K> levelRoute(){
+        List<K> list = new ArrayList<>();
+        levelRouteRecursive(root,list);
+        return list;
+    }
+    public void levelRouteRecursive(Node<K,T> currentNode,List<K> list){
+        if (currentNode == null){
+            return;
+        }
+        list.add(currentNode.getKey());
+        levelRouteRecursive(currentNode.getLeftChild(),list);
+        levelRouteRecursive(currentNode.getRightChild(),list);
+    }
+
 
 }
 

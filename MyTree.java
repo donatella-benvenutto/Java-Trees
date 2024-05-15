@@ -9,4 +9,6 @@ public interface MyTree<K,T> {
     List<K>	inOrder();
     List<K>	preOrder();
     List<K> postOrder();
+    List<K> levelRoute();
+    //void loadPostFijaExpression	(String	sPostFija);
 }
